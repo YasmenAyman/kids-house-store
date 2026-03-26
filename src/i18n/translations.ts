@@ -17,8 +17,8 @@ export const translations = {
     announcement: "Kids House | The Second Home... For Your Baby",
 
     // Hero
-    heroTitle: "The best products for cute babies find them and more..",
-    heroSubtitle: "Premium quality baby essentials curated with love",
+    heroTitle: "The best products for cute babies\nfind them and more..",
+    heroSubtitle: "Every baby need you care and with us we offer it for you",
     heroBtn: "View Products",
     heroBadge: "New + Improved",
 
@@ -53,7 +53,10 @@ export const translations = {
     promoBtn: "Shop Now",
 
     // Featured
+    featuredSubtitle: "Feature Products",
     featuredTitle: "Our products trusted by parents and doctor recommended",
+    trustedByParents: "Trusted by parents",
+    priceLabel: "Price:",
     filterAll: "All",
     filterSkincare: "Skincare",
     filterMedical: "Medical care",
@@ -68,29 +71,31 @@ export const translations = {
     // Flash Deals
     flashTitle: "FLASH DEALS END AT",
     flashSave: "Save 20%",
+    purchaseNow: "Purchase Now",
 
     // Banners
     bannerText: "The best products for cute babies find them and more..",
 
     // New Products
+    newArrivalsBadge: "New Arrivals",
     newTitle: "New products added this year special for you",
     newSale: "New Sale",
     topRated: "Top Rated",
     newestProducts: "Newest Products",
-    catCarrier: "Baby Carrier",
-    catCarrycot: "Carrycot",
-    catTable: "Baby Table",
-    catTrainingCup: "Training Cup",
-    catBag: "Baby Bag",
-    catSummer: "Summer Collection",
+    bestSeller: "Best Seller",
     exploreAll: "Explore all",
+    viewProducts: "View Products",
 
     // Footer
+    connectWithUs: "Connect With Us",
+    downloadOurApp: "Download Our App",
+    businessIdentity: "Business Identity",
+    allRightsReserved: "All Rights Reserved By",
     aboutUs: "About Us",
     contactUs: "Contact Us",
     businessInquiry: "Business Inquiry",
-    footerAbout: "Kids House is a premium baby store offering the finest products for your little ones. We believe every child deserves the best.",
-    footerCopyright: "© 2026 Kids House. All rights reserved.",
+    footerAbout: "Kids House is a premium baby store offering the finest products for your little ones.",
+    footerCopyright: "2026 Kids House. All rights reserved.",
     downloadApp: "Download our app",
 
     // Common
@@ -112,8 +117,8 @@ export const translations = {
 
     announcement: "كيدز هاوس | البيت الثاني... لطفلك",
 
-    heroTitle: "أفضل المنتجات لأطفالك الصغار اكتشفها والمزيد..",
-    heroSubtitle: "مستلزمات أطفال فاخرة مختارة بعناية وحب",
+    heroTitle: "أفضل المنتجات لأطفالك الصغار\nاكتشفها والمزيد..",
+    heroSubtitle: "كل طفل يحتاج إلى رعايتك، ونحن نقدمها لك",
     heroBtn: "عرض المنتجات",
     heroBadge: "جديد + محسّن",
 
@@ -144,7 +149,10 @@ export const translations = {
     promoOldPrice: "٦٢.٤٩ $",
     promoBtn: "تسوق الآن",
 
+    featuredSubtitle: "منتجات مميزة",
     featuredTitle: "منتجاتنا موثوقة من الآباء وموصى بها من الأطباء",
+    trustedByParents: "موثوق من الآباء",
+    priceLabel: "السعر:",
     filterAll: "الكل",
     filterSkincare: "العناية بالبشرة",
     filterMedical: "الرعاية الطبية",
@@ -158,26 +166,28 @@ export const translations = {
 
     flashTitle: "العروض السريعة تنتهي في",
     flashSave: "وفر 20%",
+    purchaseNow: "تسوق الان",
 
     bannerText: "أفضل المنتجات لأطفالك الصغار اكتشفها والمزيد..",
 
+    newArrivalsBadge: "وصلنا حديثاً",
     newTitle: "منتجات جديدة أُضيفت هذا العام خصيصاً لك",
     newSale: "تخفيضات جديدة",
     topRated: "الأعلى تقييماً",
     newestProducts: "أحدث المنتجات",
-    catCarrier: "حمّالة أطفال",
-    catCarrycot: "سرير محمول",
-    catTable: "طاولة أطفال",
-    catTrainingCup: "كوب تدريب",
-    catBag: "حقيبة أطفال",
-    catSummer: "مجموعة الصيف",
+    bestSeller: "الأكثر مبيعاً",
     exploreAll: "استكشف الكل",
+    viewProducts: "عرض المنتجات",
 
+    connectWithUs: "تواصل معنا",
+    downloadOurApp: "حمل تطبيقنا",
+    businessIdentity: "الهوية التجارية",
+    allRightsReserved: "جميع الحقوق محفوظة لـ",
     aboutUs: "من نحن",
     contactUs: "اتصل بنا",
     businessInquiry: "استفسارات تجارية",
-    footerAbout: "كيدز هاوس متجر أطفال فاخر يقدم أرقى المنتجات لأطفالك. نؤمن أن كل طفل يستحق الأفضل.",
-    footerCopyright: "© ٢٠٢٦ كيدز هاوس. جميع الحقوق محفوظة.",
+    footerAbout: "كيدز هاوس متجر أطفال فاخر يقدم أرقى المنتجات لأطفالك.",
+    footerCopyright: "٢٠٢٦ كيدز هاوس. جميع الحقوق محفوظة.",
     downloadApp: "حمّل تطبيقنا",
 
     days: "أيام",

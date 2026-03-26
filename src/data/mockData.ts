@@ -1,12 +1,12 @@
 export const brands = [
-  { id: 1, name: "Chicco", color: "#E8D5C4" },
-  { id: 2, name: "Philips Avent", color: "#D4E2D4" },
-  { id: 3, name: "Mustela", color: "#E2D8E8" },
-  { id: 4, name: "NUK", color: "#D8E2E8" },
-  { id: 5, name: "Pampers", color: "#E8E2D4" },
-  { id: 6, name: "Johnson's", color: "#D4D8E8" },
-  { id: 7, name: "Aveeno Baby", color: "#E8D4D8" },
-  { id: 8, name: "Babyzen", color: "#D4E8E2" },
+  { id: 1, name: "Chicco", color: "#E8D5C4", bgImage: "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&q=80&w=400&h=300", logoText: "Chicco" },
+  { id: 2, name: "Philips Avent", color: "#D4E2D4", bgImage: "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?auto=format&fit=crop&q=80&w=400&h=300", logoText: "Avent" },
+  { id: 3, name: "Mustela", color: "#E2D8E8", bgImage: "https://images.unsplash.com/photo-1522771731475-6a843eb7596c?auto=format&fit=crop&q=80&w=400&h=300", logoText: "Mustela" },
+  { id: 4, name: "NUK", color: "#D8E2E8", bgImage: "https://images.unsplash.com/photo-1544256718-d9df6b55e62f?auto=format&fit=crop&q=80&w=400&h=300", logoText: "NUK" },
+  { id: 5, name: "Pampers", color: "#E8E2D4", bgImage: "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&q=80&w=400&h=300", logoText: "Pampers" },
+  { id: 6, name: "Johnson's", color: "#D4D8E8", bgImage: "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&q=80&w=400&h=300", logoText: "Johnson" },
+  { id: 7, name: "Aveeno Baby", color: "#E8D4D8", bgImage: "https://images.unsplash.com/photo-1554046556-32d75a1372df?auto=format&fit=crop&q=80&w=400&h=300", logoText: "Aveeno" },
+  { id: 8, name: "Babyzen", color: "#D4E8E2", bgImage: "https://images.unsplash.com/photo-1596464716127-f2a82984bde4?auto=format&fit=crop&q=80&w=400&h=300", logoText: "Babyzen" },
 ];
 
 export const products = [
@@ -25,6 +25,10 @@ export const flashDeals = [
   { id: 2, title: "Diaper Bag Deluxe", titleAr: "حقيبة حفاضات فاخرة", price: 44.99, oldPrice: 56.99, discount: 21, image: "" },
   { id: 3, title: "Baby Swing Chair", titleAr: "كرسي أرجوحة أطفال", price: 119.99, oldPrice: 149.99, discount: 20, image: "" },
   { id: 4, title: "Bottle Warmer Set", titleAr: "جهاز تسخين الرضّاعات", price: 29.99, oldPrice: 37.99, discount: 21, image: "" },
+  { id: 5, title: "Sniffer Soothers Nose + Face Wipes", titleAr: "مناديل مهدئة للأنف والوجه", price: 400.00, oldPrice: 500.00, discount: 20, image: "" },
+  { id: 6, title: "Ergonomic Baby Carrier", titleAr: "حمالة أطفال مريحة", price: 89.99, oldPrice: 110.00, discount: 18, image: "" },
+  { id: 7, title: "Baby Health Care Kit", titleAr: "مجموعة رعاية صحية للأطفال", price: 24.50, oldPrice: 35.00, discount: 30, image: "" },
+  { id: 8, title: "Portable Milk Warmer", titleAr: "جهاز تسخين الحليب المحمول", price: 45.00, oldPrice: 60.00, discount: 25, image: "" },
 ];
 
 export const categoryTabs = [
@@ -61,4 +65,131 @@ export const newProductCategories = [
   { en: "Training Cup", ar: "كوب تدريب" },
   { en: "Baby Bag", ar: "حقيبة أطفال" },
   { en: "Summer Collection", ar: "مجموعة الصيف" },
+];
+
+export const nestedCategories = [
+  {
+    id: 1,
+    en: "Baby Supplies",
+    ar: "مستلزمات الأطفال",
+    subcategories: [
+      {
+        id: 11,
+        en: "Baby Carrier",
+        ar: "حمّالة أطفال",
+        subSubcategories: [
+          { en: "Clothes", ar: "ملابس" },
+          { en: "Carrycot", ar: "سرير محمول" },
+          { en: "Pooty", ar: "نونية" },
+          { en: "Spare Table", ar: "طاولة إضافية" },
+          { en: "Training Cup", ar: "كوب تدريب" },
+          { en: "Summer Collection", ar: "مجموعة الصيف" },
+        ]
+      },
+      {
+        id: 12,
+        en: "Baby Stroller",
+        ar: "عربة أطفال",
+        subSubcategories: [
+          { en: "Double Stroller", ar: "عربة مزدوجة" },
+          { en: "Jogger Stroller", ar: "عربة للجري" },
+          { en: "Travel System", ar: "نظام سفر" },
+        ]
+      },
+      {
+        id: 13,
+        en: "Baby Walker",
+        ar: "مشاية أطفال",
+        subSubcategories: [
+          { en: "Standard Walker", ar: "مشاية عادية" },
+          { en: "Activity Center", ar: "مركز أنشطة" },
+        ]
+      },
+      {
+        id: 14,
+        en: "Baby Bouncer",
+        ar: "كرسي هزاز",
+        subSubcategories: [
+          { en: "Vibrating Bouncer", ar: "كرسي هزاز هزاز" },
+          { en: "Electronic Swing", ar: "أرجوحة إلكترونية" },
+        ]
+      },
+      {
+        id: 15,
+        en: "Baby Bed",
+        ar: "سرير أطفال",
+        subSubcategories: [
+          { en: "Crib", ar: "مهد" },
+          { en: "Bassinet", ar: "سرير صغير" },
+          { en: "Playard", ar: "ساحة لعب" },
+        ]
+      },
+      {
+        id: 16,
+        en: "Baby Bag",
+        ar: "حقيبة أطفال",
+        subSubcategories: [
+          { en: "Diaper Bag", ar: "حقيبة حفاضات" },
+          { en: "Backpack", ar: "حقيبة ظهر" },
+        ]
+      }
+    ]
+  },
+  {
+    id: 2,
+    en: "Nutritional Supplies",
+    ar: "المكملات الغذائية",
+    subcategories: [
+      {
+        id: 21,
+        en: "Baby Milk",
+        ar: "حليب أطفال",
+        subSubcategories: [
+          { en: "Formula Stage 1", ar: "تركيبة المرحلة 1" },
+          { en: "Formula Stage 2", ar: "تركيبة المرحلة 2" },
+        ]
+      },
+      {
+        id: 22,
+        en: "Baby Food",
+        ar: "طعام أطفال",
+        subSubcategories: [
+          { en: "Fruit Puree", ar: "بيوريه فواكه" },
+          { en: "Cereal", ar: "حبوب" },
+        ]
+      }
+    ]
+  },
+  {
+    id: 3,
+    en: "Bathing & Skin Care",
+    ar: "الاستحمام والعناية",
+    subcategories: [
+      {
+        id: 31,
+        en: "Baby Soap",
+        ar: "صابون أطفال",
+        subSubcategories: [
+          { en: "Liquid Soap", ar: "صابون سائل" },
+          { en: "Bar Soap", ar: "صابون قطع" },
+        ]
+      }
+    ]
+  },
+  {
+    id: 4,
+    en: "Breastfeeding Supplies",
+    ar: "مستلزمات الرضاعة",
+    subcategories: [
+      {
+        id: 41,
+        en: "Breast Pump",
+        ar: "مضخة ثدي",
+        subSubcategories: [
+          { en: "Manual Pump", ar: "مضخة يدوية" },
+          { en: "Electric Pump", ar: "مضخة كهربائية" },
+        ]
+      }
+    ]
+  }
 ];

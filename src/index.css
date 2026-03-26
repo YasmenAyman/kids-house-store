@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -15,8 +15,8 @@
     --popover: 40 30% 96%;
     --popover-foreground: 25 20% 16%;
 
-    --primary: 145 18% 42%;
-    --primary-foreground: 40 30% 97%;
+    --primary: 30 50% 91%;
+    --primary-foreground: 25 20% 16%;
 
     --secondary: 33 30% 90%;
     --secondary-foreground: 25 20% 20%;
@@ -32,7 +32,7 @@
 
     --border: 33 20% 88%;
     --input: 33 20% 88%;
-    --ring: 145 18% 42%;
+    --ring: 30 50% 91%;
 
     --radius: 1rem;
 
@@ -44,9 +44,9 @@
     --taupe-light: 25 12% 70%;
     --gold: 38 60% 55%;
 
-    --font-display: 'Playfair Display', serif;
-    --font-body: 'Inter', sans-serif;
-    --font-arabic: 'Noto Sans Arabic', sans-serif;
+    --font-display: 'Montserrat', sans-serif;
+    --font-body: 'Montserrat', sans-serif;
+    --font-arabic: 'Montserrat', sans-serif;
 
     --shadow-soft: 0 2px 16px 0 hsl(25 20% 16% / 0.04);
     --shadow-card: 0 4px 24px 0 hsl(25 20% 16% / 0.06);

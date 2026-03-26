@@ -1,15 +1,19 @@
 import { useLanguage } from '@/i18n/LanguageContext';
 import { brands } from '@/data/mockData';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useRef, useEffect, useState } from 'react';
+import useEmblaCarousel from 'embla-carousel-react';
+import { useRef, useEffect, useCallback, useState } from 'react';
 
 const BrandCarousel = () => {
-  const { t, lang, dir } = useLanguage();
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const sectionRef = useRef<HTMLElement>(null);
+  const { t, dir } = useLanguage();
+  const [emblaRef, emblaApi] = useEmblaCarousel({ 
+    loop: true, 
+    direction: dir as 'ltr' | 'rtl',
+    align: 'start',
+    dragFree: true
+  });
   const [isVisible, setIsVisible] = useState(false);
-  const autoScrollRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const [isPaused, setIsPaused] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const autoplayRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Intersection observer for entrance animation
   useEffect(() => {
@@ -23,39 +27,36 @@ const BrandCarousel = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Auto-scroll
-  useEffect(() => {
-    if (!scrollRef.current || isPaused) return;
-    autoScrollRef.current = setInterval(() => {
-      if (!scrollRef.current) return;
-      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-      const atEnd = dir === 'rtl'
-        ? scrollLeft <= -(scrollWidth - clientWidth) + 10
-        : scrollLeft >= scrollWidth - clientWidth - 10;
-      if (atEnd) {
-        scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
-      } else {
-        scrollRef.current.scrollBy({
-          left: dir === 'rtl' ? -160 : 160,
-          behavior: 'smooth',
-        });
-      }
+  // Autoplay functionality safely
+  const startAutoplay = useCallback(() => {
+    if (!emblaApi) return;
+    if (autoplayRef.current) clearInterval(autoplayRef.current);
+    autoplayRef.current = setInterval(() => {
+      emblaApi.scrollNext();
     }, 3000);
-    return () => {
-      if (autoScrollRef.current) clearInterval(autoScrollRef.current);
-    };
-  }, [dir, isPaused]);
+  }, [emblaApi]);
 
-  const scroll = (direction: 'left' | 'right') => {
-    if (!scrollRef.current) return;
-    const amount = dir === 'rtl'
-      ? (direction === 'left' ? 200 : -200)
-      : (direction === 'left' ? -200 : 200);
-    scrollRef.current.scrollBy({ left: amount, behavior: 'smooth' });
-  };
+  const stopAutoplay = useCallback(() => {
+    if (autoplayRef.current) clearInterval(autoplayRef.current);
+  }, []);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    startAutoplay();
+    
+    // Resume autoplay when user interaction ends
+    emblaApi.on('pointerUp', startAutoplay);
+    emblaApi.on('pointerDown', stopAutoplay);
+
+    return () => {
+      stopAutoplay();
+      emblaApi.off('pointerUp', startAutoplay);
+      emblaApi.off('pointerDown', stopAutoplay);
+    };
+  }, [emblaApi, startAutoplay, stopAutoplay]);
 
   return (
-    <section ref={sectionRef} id="brands" className="py-12 md:py-16">
+    <section ref={sectionRef} id="brands" className="py-12 md:py-16 overflow-hidden">
       <div className="container">
         <div className="flex items-center justify-between mb-8">
           <h2
@@ -66,54 +67,58 @@ const BrandCarousel = () => {
             {t('brandsTitle')}
           </h2>
           <div
-            className={`flex items-center gap-2 transition-all duration-700 ${
+            className={`transition-all duration-700 ${
               isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
             }`}
           >
-            <button
-              onClick={() => scroll('left')}
-              className="w-9 h-9 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => scroll('right')}
-              className="w-9 h-9 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
-            <a href="#" className="text-sm font-medium text-primary hover:underline ms-2">
+            <a href="#" className="flex items-center gap-1 text-sm font-semibold text-gray-500 hover:text-gray-900 transition-colors">
               {t('viewAll')}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={dir === 'rtl' ? 'rotate-180' : ''}>
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
             </a>
           </div>
         </div>
 
-        <div
-          ref={scrollRef}
-          className="flex gap-4 overflow-x-auto scrollbar-hide pb-2"
-          style={{ scrollbarWidth: 'none' }}
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
+        {/* Embla Carousel Viewport */}
+        <div 
+          className="overflow-hidden" 
+          ref={emblaRef}
+          onMouseEnter={stopAutoplay}
+          onMouseLeave={startAutoplay}
         >
-          {brands.map((brand, i) => (
-            <div
-              key={brand.id}
-              className={`flex-shrink-0 w-36 h-36 rounded-2xl flex flex-col items-center justify-center gap-3 shadow-soft cursor-pointer
-                transition-all duration-500 hover:scale-105 hover:shadow-hover group
-                ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-              style={{
-                backgroundColor: brand.color,
-                transitionDelay: isVisible ? `${i * 100}ms` : '0ms',
-              }}
-            >
-              <div className="w-16 h-16 rounded-full bg-background/80 flex items-center justify-center group-hover:bg-background transition-colors">
-                <span className="text-xs font-bold text-foreground">{brand.name.slice(0, 2)}</span>
+          <div className="flex touch-pan-y" style={{ backfaceVisibility: 'hidden' }}>
+            {brands.map((brand, i) => (
+              <div
+                key={brand.id}
+                className={`flex-none w-[280px] md:w-[320px] px-3 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                style={{ transition: 'opacity 0.5s ease-out, transform 0.5s ease-out', transitionDelay: `${i * 100}ms` }}
+              >
+                <div className="relative w-full h-40 rounded-[2rem] overflow-hidden group cursor-pointer shadow-sm bg-gray-100">
+                  {/* Background Image with Scale Animation */}
+                  <div 
+                    className="absolute inset-0 w-full h-full bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-110"
+                    style={{ 
+                      backgroundImage: brand.bgImage ? `url(${brand.bgImage})` : 'none',
+                      backgroundColor: brand.color 
+                    }}
+                  />
+                  
+                  {/* Dark overlay for better logo contrast */}
+                  <div className="absolute inset-0 bg-black/40 transition-opacity duration-700 group-hover:bg-black/50" />
+
+                  {/* Centered Logo Circle with Scale Animation */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-20 h-20 rounded-full bg-white shadow-lg flex items-center justify-center transition-transform duration-700 ease-out group-hover:scale-110">
+                      <span className="text-sm font-bold text-gray-800 text-center uppercase tracking-wide px-2 drop-shadow-sm">
+                        {brand.logoText || brand.name}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <span className="text-xs font-medium text-foreground/80 group-hover:text-foreground transition-colors">
-                {brand.name}
-              </span>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
