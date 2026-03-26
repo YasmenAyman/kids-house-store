@@ -1,9 +1,6 @@
 import { useLanguage } from '@/i18n/LanguageContext';
 import { Facebook, Instagram, Linkedin } from 'lucide-react';
 import logo from '@/assets/logo.svg';
-import googlePlayBadge from '/C:/Users/Lenovo/.gemini/antigravity/brain/7ff00023-b4e6-45a0-823e-a4f6fcf14bf5/google_play_badge_1774533768998.png';
-import appStoreBadge from '/C:/Users/Lenovo/.gemini/antigravity/brain/7ff00023-b4e6-45a0-823e-a4f6fcf14bf5/app_store_badge_1774533792117.png';
-import toniaLogo from '/C:/Users/Lenovo/.gemini/antigravity/brain/7ff00023-b4e6-45a0-823e-a4f6fcf14bf5/tonia_logo_footer_1774533835631.png';
 
 const Footer = () => {
   const { t, lang } = useLanguage();
