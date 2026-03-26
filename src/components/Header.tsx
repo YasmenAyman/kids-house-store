@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useLanguage } from '@/i18n/LanguageContext';
-import { Search, Heart, ShoppingBag, User, UserPlus, Menu, X, ChevronDown, Languages } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Search, Heart, ShoppingBag, User, UserPlus, Menu, X, ChevronDown } from 'lucide-react';
 import logo from '@/assets/logo.svg';
 
 const Header = () => {
@@ -11,7 +12,7 @@ const Header = () => {
     { key: 'home' as const, href: '#', hasDropdown: false },
     { key: 'brands' as const, href: '#brands', hasDropdown: true },
     { key: 'downloadProducts' as const, href: '#', hasDropdown: true },
-    { key: 'categories' as const, href: '#categories', hasDropdown: true },
+    { key: 'categories' as const, href: '/categories', hasDropdown: true },
   ];
 
   return (
@@ -89,16 +90,16 @@ const Header = () => {
       <nav className="hidden md:block bg-[#F9F9F9] pb-4">
         <div className="container flex items-center gap-8">
           {navLinks.map((link, index) => (
-            <a
+            <Link
               key={link.key}
-              href={link.href}
+              to={link.href}
               className={`flex items-center gap-1 text-sm transition-colors ${
                 index === 0 ? 'text-foreground font-bold' : 'text-gray-500 font-medium hover:text-gray-900'
               }`}
             >
               {t(link.key)}
               {link.hasDropdown && <ChevronDown className="w-4 h-4 opacity-50" />}
-            </a>
+            </Link>
           ))}
         </div>
       </nav>
@@ -136,14 +137,15 @@ const Header = () => {
 
             <nav className="space-y-1">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.key}
-                  href={link.href}
+                  to={link.href}
                   className="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium text-foreground hover:bg-gray-50 transition-colors"
+                  onClick={() => setMobileOpen(false)}
                 >
                   {t(link.key)}
                   {link.hasDropdown && <ChevronDown className="w-4 h-4 text-gray-400" />}
-                </a>
+                </Link>
               ))}
             </nav>
             <div className="flex gap-2 pt-2">
