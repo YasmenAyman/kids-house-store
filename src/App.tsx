@@ -5,6 +5,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { LanguageProvider } from "@/i18n/LanguageContext";
 import Index from "./pages/Index.tsx";
+import CategoriesPage from "./pages/CategoriesPage.tsx";
+import SubCategoriesPage from "./pages/SubCategoriesPage.tsx";
+import SubSubCategoriesPage from "./pages/SubSubCategoriesPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -18,6 +21,9 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/categories" element={<CategoriesPage />} />
+            <Route path="/categories/:categorySlug" element={<SubCategoriesPage />} />
+            <Route path="/categories/:categorySlug/:subCategorySlug" element={<SubSubCategoriesPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
