@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useLanguage } from '@/i18n/LanguageContext';
-import { Search, Heart, ShoppingBag, User, UserPlus, Menu, X, ChevronDown, Languages } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Search, Heart, ShoppingBag, User, UserPlus, Menu, X, ChevronDown } from 'lucide-react';
 import logo from '@/assets/logo.svg';
 
 const Header = () => {
@@ -89,16 +90,16 @@ const Header = () => {
       <nav className="hidden md:block bg-[#F9F9F9] pb-4">
         <div className="container flex items-center gap-8">
           {navLinks.map((link, index) => (
-            <a
+            <Link
               key={link.key}
-              href={link.href}
+              to={link.href}
               className={`flex items-center gap-1 text-sm transition-colors ${
                 index === 0 ? 'text-foreground font-bold' : 'text-gray-500 font-medium hover:text-gray-900'
               }`}
             >
               {t(link.key)}
               {link.hasDropdown && <ChevronDown className="w-4 h-4 opacity-50" />}
-            </a>
+            </Link>
           ))}
         </div>
       </nav>
