@@ -70,11 +70,13 @@ const Footer = () => {
             <div className="space-y-3 text-center md:text-start">
               <p className="text-sm font-semibold text-[#888888]">{t('downloadOurApp')}</p>
               <div className="flex items-center gap-3">
-                <a href="#" className="h-10 transition-transform hover:scale-105">
-                  <img src={googlePlayBadge} alt="Google Play" className="h-full object-contain rounded-md" />
+                <a href="#" className="inline-flex items-center gap-2 h-10 px-4 bg-black text-white rounded-md text-xs font-medium transition-transform hover:scale-105">
+                  <span className="text-lg">▶</span>
+                  <span className="flex flex-col leading-tight"><span className="text-[9px] opacity-70">GET IT ON</span><span className="text-sm font-semibold">Google Play</span></span>
                 </a>
-                <a href="#" className="h-10 transition-transform hover:scale-105">
-                  <img src={appStoreBadge} alt="App Store" className="h-full object-contain rounded-md" />
+                <a href="#" className="inline-flex items-center gap-2 h-10 px-4 bg-black text-white rounded-md text-xs font-medium transition-transform hover:scale-105">
+                  <span className="text-lg"></span>
+                  <span className="flex flex-col leading-tight"><span className="text-[9px] opacity-70">Download on the</span><span className="text-sm font-semibold">App Store</span></span>
                 </a>
               </div>
             </div>
@@ -84,10 +86,9 @@ const Footer = () => {
           {/* Copyright */}
           <div className="flex items-center gap-2 text-sm text-[#888888] font-medium">
             <span>@{t('allRightsReserved')}</span>
-            <span className="font-black text-[#111] uppercase tracking-tighter flex items-center gap-1">
-              TONIA
-              <img src={toniaLogo} alt="" className="w-5 h-5 inline-block opacity-80" />
-            </span>
+              <span className="font-black text-foreground uppercase tracking-tighter">
+                TQNIA
+              </span>
           </div>
 
         </div>
