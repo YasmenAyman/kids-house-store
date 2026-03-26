@@ -11,7 +11,7 @@ const Header = () => {
     { key: 'home' as const, href: '#', hasDropdown: false },
     { key: 'brands' as const, href: '#brands', hasDropdown: true },
     { key: 'downloadProducts' as const, href: '#', hasDropdown: true },
-    { key: 'categories' as const, href: '#categories', hasDropdown: true },
+    { key: 'categories' as const, href: '/categories', hasDropdown: true },
   ];
 
   return (
