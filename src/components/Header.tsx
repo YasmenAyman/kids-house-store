@@ -137,14 +137,15 @@ const Header = () => {
 
             <nav className="space-y-1">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.key}
-                  href={link.href}
+                  to={link.href}
                   className="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium text-foreground hover:bg-gray-50 transition-colors"
+                  onClick={() => setMobileOpen(false)}
                 >
                   {t(link.key)}
                   {link.hasDropdown && <ChevronDown className="w-4 h-4 text-gray-400" />}
-                </a>
+                </Link>
               ))}
             </nav>
             <div className="flex gap-2 pt-2">
