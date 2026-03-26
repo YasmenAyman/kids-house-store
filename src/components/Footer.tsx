@@ -1,9 +1,6 @@
 import { useLanguage } from '@/i18n/LanguageContext';
 import { Facebook, Instagram, Linkedin } from 'lucide-react';
 import logo from '@/assets/logo.svg';
-import googlePlayBadge from '/C:/Users/Lenovo/.gemini/antigravity/brain/7ff00023-b4e6-45a0-823e-a4f6fcf14bf5/google_play_badge_1774533768998.png';
-import appStoreBadge from '/C:/Users/Lenovo/.gemini/antigravity/brain/7ff00023-b4e6-45a0-823e-a4f6fcf14bf5/app_store_badge_1774533792117.png';
-import toniaLogo from '/C:/Users/Lenovo/.gemini/antigravity/brain/7ff00023-b4e6-45a0-823e-a4f6fcf14bf5/tonia_logo_footer_1774533835631.png';
 
 const Footer = () => {
   const { t, lang } = useLanguage();
@@ -73,11 +70,13 @@ const Footer = () => {
             <div className="space-y-3 text-center md:text-start">
               <p className="text-sm font-semibold text-[#888888]">{t('downloadOurApp')}</p>
               <div className="flex items-center gap-3">
-                <a href="#" className="h-10 transition-transform hover:scale-105">
-                  <img src={googlePlayBadge} alt="Google Play" className="h-full object-contain rounded-md" />
+                <a href="#" className="inline-flex items-center gap-2 h-10 px-4 bg-black text-white rounded-md text-xs font-medium transition-transform hover:scale-105">
+                  <span className="text-lg">▶</span>
+                  <span className="flex flex-col leading-tight"><span className="text-[9px] opacity-70">GET IT ON</span><span className="text-sm font-semibold">Google Play</span></span>
                 </a>
-                <a href="#" className="h-10 transition-transform hover:scale-105">
-                  <img src={appStoreBadge} alt="App Store" className="h-full object-contain rounded-md" />
+                <a href="#" className="inline-flex items-center gap-2 h-10 px-4 bg-black text-white rounded-md text-xs font-medium transition-transform hover:scale-105">
+                  <span className="text-lg"></span>
+                  <span className="flex flex-col leading-tight"><span className="text-[9px] opacity-70">Download on the</span><span className="text-sm font-semibold">App Store</span></span>
                 </a>
               </div>
             </div>
@@ -87,10 +86,9 @@ const Footer = () => {
           {/* Copyright */}
           <div className="flex items-center gap-2 text-sm text-[#888888] font-medium">
             <span>@{t('allRightsReserved')}</span>
-            <span className="font-black text-[#111] uppercase tracking-tighter flex items-center gap-1">
-              TONIA
-              <img src={toniaLogo} alt="" className="w-5 h-5 inline-block opacity-80" />
-            </span>
+              <span className="font-black text-foreground uppercase tracking-tighter">
+                TQNIA
+              </span>
           </div>
 
         </div>
