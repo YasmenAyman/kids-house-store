@@ -65,16 +65,14 @@ const ProductsPage = () => {
 
   // Resolve breadcrumb
   const parent = categoriesData.find((c) => c.slug === categorySlug);
+  const subCategory = parent?.children?.find((c) => c.slug === subCategorySlug);
+  const subSubCategory = subSubCategorySlug
+    ? subCategory?.children?.find((c) => c.slug === subSubCategorySlug)
+    : undefined;
+
   if (!parent) return <Navigate to="/categories" replace />;
-
-  const subCategory = parent.children?.find((c) => c.slug === subCategorySlug);
   if (!subCategory) return <Navigate to={`/categories/${categorySlug}`} replace />;
-
-  let subSubCategory;
-  if (subSubCategorySlug) {
-    subSubCategory = subCategory.children?.find((c) => c.slug === subSubCategorySlug);
-    if (!subSubCategory) return <Navigate to={`/categories/${categorySlug}/${subCategorySlug}`} replace />;
-  }
+  if (subSubCategorySlug && !subSubCategory) return <Navigate to={`/categories/${categorySlug}/${subCategorySlug}`} replace />;
 
   const parentName = lang === 'ar' ? parent.ar : parent.en;
   const subName = lang === 'ar' ? subCategory.ar : subCategory.en;
