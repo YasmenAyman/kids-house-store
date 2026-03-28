@@ -360,7 +360,11 @@ const ProductsPage = () => {
             {/* Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {currentProducts.map((product) => (
-                <div key={product.id} className="bg-card rounded-2xl overflow-hidden border border-border hover:shadow-md transition-shadow p-4 flex flex-col">
+                <Link
+                  key={product.id}
+                  to={`/categories/${categorySlug}/${subCategorySlug}/${subSubCategorySlug}/product/${product.id}`}
+                  className="bg-card rounded-2xl overflow-hidden border border-border hover:shadow-md transition-shadow p-4 flex flex-col"
+                >
                   {/* Image */}
                   <div className="aspect-square w-full bg-background rounded-xl flex items-center justify-center mb-3 overflow-hidden">
                     <img
@@ -391,7 +395,7 @@ const ProductsPage = () => {
                     <span className="w-3.5 h-3.5 rounded-full border border-destructive flex items-center justify-center text-[8px]">%</span>
                     {lang === 'ar' ? `وفر ${product.discount}% حتى نفاد الكمية` : `Save ${product.discount}% till out of stock`}
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
 
