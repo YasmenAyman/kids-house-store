@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { Link } from 'react-router-dom';
 import { Search, Heart, ShoppingBag, User, UserPlus, Menu, X, ChevronDown } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
 import logo from '@/assets/logo.svg';
 
 const Header = () => {
