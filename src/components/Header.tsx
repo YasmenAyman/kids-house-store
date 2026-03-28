@@ -7,6 +7,7 @@ import logo from '@/assets/logo.svg';
 
 const Header = () => {
   const { t, lang, setLang } = useLanguage();
+  const { totalItems, setIsCartOpen } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const navLinks = [
@@ -55,8 +56,16 @@ const Header = () => {
               <Heart className="w-5 h-5" />
             </button>
 
-            <button className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-black/5 transition-colors text-foreground">
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-black/5 transition-colors text-foreground"
+            >
               <ShoppingBag className="w-5 h-5" />
+              {totalItems > 0 && (
+                <span className="absolute -top-1 -end-1 min-w-[20px] h-5 px-1 flex items-center justify-center rounded-full bg-primary text-primary-foreground text-[11px] font-bold">
+                  {totalItems}
+                </span>
+              )}
             </button>
 
             {/* Vertical Separator */}
@@ -122,8 +131,16 @@ const Header = () => {
               <button className="flex items-center justify-center p-2 rounded-full hover:bg-gray-50 text-foreground">
                 <Heart className="w-5 h-5" />
               </button>
-              <button className="flex items-center justify-center p-2 rounded-full hover:bg-gray-50 text-foreground">
+              <button
+                onClick={() => { setIsCartOpen(true); setMobileOpen(false); }}
+                className="relative flex items-center justify-center p-2 rounded-full hover:bg-gray-50 text-foreground"
+              >
                 <ShoppingBag className="w-5 h-5" />
+                {totalItems > 0 && (
+                  <span className="absolute -top-1 -end-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-primary text-primary-foreground text-[10px] font-bold">
+                    {totalItems}
+                  </span>
+                )}
               </button>
               <button
                 onClick={() => setLang(lang === 'en' ? 'ar' : 'en')}
