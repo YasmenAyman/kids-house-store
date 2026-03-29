@@ -77,9 +77,9 @@ const CartModal = () => {
               <button onClick={() => setIsCartOpen(false)} className="flex-1 h-10 rounded-full border border-border text-xs font-medium text-foreground hover:bg-muted transition-colors">
                 {lang === 'ar' ? 'احفظ لاحقاً' : 'Keep for later'}
               </button>
-              <button className="flex-1 h-10 rounded-full bg-destructive text-destructive-foreground text-xs font-medium hover:opacity-90 transition-opacity">
+              <Link to="/checkout" onClick={() => setIsCartOpen(false)} className="flex-1 h-10 rounded-full bg-destructive text-destructive-foreground text-xs font-medium hover:opacity-90 transition-opacity flex items-center justify-center">
                 {lang === 'ar' ? 'اشترِ الآن' : 'Buy Now'}
-              </button>
+              </Link>
             </div>
           )}
 
