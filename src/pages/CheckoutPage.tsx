@@ -22,9 +22,9 @@ const steps = [
 
 const CheckoutPage = () => {
   const { items, totalPrice, updateQuantity, removeFromCart, clearCart } = useCart();
-  const { language } = useLanguage();
+  const { lang } = useLanguage();
   const navigate = useNavigate();
-  const isAr = language === 'ar';
+  const isAr = lang === 'ar';
 
   const [currentStep, setCurrentStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
