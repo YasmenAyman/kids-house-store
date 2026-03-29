@@ -2,6 +2,7 @@ import { useLanguage } from '@/i18n/LanguageContext';
 import { brands } from '@/data/mockData';
 import useEmblaCarousel from 'embla-carousel-react';
 import { useRef, useEffect, useCallback, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const BrandCarousel = () => {
   const { t, dir } = useLanguage();
@@ -71,12 +72,12 @@ const BrandCarousel = () => {
               isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
             }`}
           >
-            <a href="#" className="flex items-center gap-1 text-sm font-semibold text-gray-500 hover:text-gray-900 transition-colors">
+            <Link to="/brands" className="flex items-center gap-1 text-sm font-semibold text-gray-500 hover:text-gray-900 transition-colors">
               {t('viewAll')}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={dir === 'rtl' ? 'rotate-180' : ''}>
                 <polyline points="9 18 15 12 9 6"></polyline>
               </svg>
-            </a>
+            </Link>
           </div>
         </div>
 
@@ -99,20 +100,21 @@ const BrandCarousel = () => {
                   <div 
                     className="absolute inset-0 w-full h-full bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-110"
                     style={{ 
-                      backgroundImage: brand.bgImage ? `url(${brand.bgImage})` : 'none',
-                      backgroundColor: brand.color 
+                      backgroundImage: `url(/src/assets/${brand.bgImage})`,
                     }}
                   />
                   
-                  {/* Dark overlay for better logo contrast */}
-                  <div className="absolute inset-0 bg-black/40 transition-opacity duration-700 group-hover:bg-black/50" />
+                  {/* Subtle overlay */}
+                  <div className="absolute inset-0 bg-black/10 transition-opacity duration-700 group-hover:bg-black/30" />
 
                   {/* Centered Logo Circle with Scale Animation */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-20 h-20 rounded-full bg-white shadow-lg flex items-center justify-center transition-transform duration-700 ease-out group-hover:scale-110">
-                      <span className="text-sm font-bold text-gray-800 text-center uppercase tracking-wide px-2 drop-shadow-sm">
-                        {brand.logoText || brand.name}
-                      </span>
+                    <div className="w-24 h-24 rounded-full bg-white shadow-lg flex items-center justify-center transition-transform duration-700 ease-out group-hover:scale-110 p-4">
+                      <img 
+                        src={`/src/assets/${brand.logo}`} 
+                        alt={brand.name} 
+                        className="max-w-full max-h-full object-contain" 
+                      />
                     </div>
                   </div>
                 </div>

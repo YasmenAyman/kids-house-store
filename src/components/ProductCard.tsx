@@ -1,8 +1,11 @@
-import { Heart, ShieldCheck } from 'lucide-react';
+import { Heart, ShieldCheck, ShoppingBasket } from 'lucide-react';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { useState } from 'react';
+import { useCart } from '@/context/CartContext';
+import { useWishlist } from '@/context/WishlistContext';
 
 interface ProductCardProps {
+  id?: number;
   title: string;
   titleAr: string;
   price: number;
@@ -11,9 +14,12 @@ interface ProductCardProps {
   image: string;
 }
 
-const ProductCard = ({ title, titleAr, price, oldPrice, discount, image }: ProductCardProps) => {
+const ProductCard = ({ id, title, titleAr, price, oldPrice, discount, image }: ProductCardProps) => {
   const { t, lang } = useLanguage();
-  const [isFavorite, setIsFavorite] = useState(false);
+  const { addToCart } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
+
+  const isFavorite = id ? isInWishlist(id) : false;
 
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-black/5 hover:shadow-md transition-shadow flex flex-col p-4 relative w-full aspect-[4/5] min-h-[380px]">
@@ -23,14 +29,32 @@ const ProductCard = ({ title, titleAr, price, oldPrice, discount, image }: Produ
           <ShieldCheck className="w-3.5 h-3.5" />
           {t('trustedByParents')}
         </div>
-        <button 
-          onClick={() => setIsFavorite(!isFavorite)}
-          className="w-8 h-8 rounded-full border border-border bg-white flex items-center justify-center hover:bg-black/5 transition-colors shrink-0"
-        >
-          <Heart 
-            className={`w-4 h-4 transition-colors ${isFavorite ? 'text-red-500 fill-red-500' : 'text-muted-foreground'}`} 
-          />
-        </button>
+        <div className="flex gap-2 shrink-0">
+          <button 
+            onClick={() => {
+              if (id) {
+                toggleWishlist({ id, title, titleAr, price, oldPrice, discount, image });
+              }
+            }}
+            className={`w-8 h-8 rounded-full border flex items-center justify-center transition-colors ${
+              isFavorite ? 'text-red-500 border-red-500 bg-red-50' : 'border-border bg-white hover:bg-black/5'
+            }`}
+          >
+            <Heart 
+              className={`w-4 h-4 transition-colors ${isFavorite ? 'fill-red-500' : 'text-muted-foreground'}`} 
+            />
+          </button>
+          <button 
+            onClick={() => {
+              if (id) {
+                addToCart({ id, title, titleAr, price, oldPrice, discount, image });
+              }
+            }}
+            className="w-8 h-8 rounded-full border border-border bg-white flex items-center justify-center hover:bg-black/5 transition-colors text-muted-foreground hover:text-foreground"
+          >
+            <ShoppingBasket className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
       {/* Image Area */}

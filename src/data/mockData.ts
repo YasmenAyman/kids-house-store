@@ -1,12 +1,16 @@
 export const brands = [
-  { id: 1, name: "Chicco", color: "#E8D5C4", bgImage: "https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&q=80&w=400&h=300", logoText: "Chicco" },
-  { id: 2, name: "Philips Avent", color: "#D4E2D4", bgImage: "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?auto=format&fit=crop&q=80&w=400&h=300", logoText: "Avent" },
-  { id: 3, name: "Mustela", color: "#E2D8E8", bgImage: "https://images.unsplash.com/photo-1522771731475-6a843eb7596c?auto=format&fit=crop&q=80&w=400&h=300", logoText: "Mustela" },
-  { id: 4, name: "NUK", color: "#D8E2E8", bgImage: "https://images.unsplash.com/photo-1544256718-d9df6b55e62f?auto=format&fit=crop&q=80&w=400&h=300", logoText: "NUK" },
-  { id: 5, name: "Pampers", color: "#E8E2D4", bgImage: "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&q=80&w=400&h=300", logoText: "Pampers" },
-  { id: 6, name: "Johnson's", color: "#D4D8E8", bgImage: "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&q=80&w=400&h=300", logoText: "Johnson" },
-  { id: 7, name: "Aveeno Baby", color: "#E8D4D8", bgImage: "https://images.unsplash.com/photo-1554046556-32d75a1372df?auto=format&fit=crop&q=80&w=400&h=300", logoText: "Aveeno" },
-  { id: 8, name: "Babyzen", color: "#D4E8E2", bgImage: "https://images.unsplash.com/photo-1596464716127-f2a82984bde4?auto=format&fit=crop&q=80&w=400&h=300", logoText: "Babyzen" },
+  { id: 1, name: "Brand 1", bgImage: "brand_bg_1.png", logo: "brand_logo_1.png", category: "Type A" },
+  { id: 2, name: "Brand 2", bgImage: "brand_bg_2.png", logo: "brand_logo_2.png", category: "Type B" },
+  { id: 3, name: "Brand 3", bgImage: "brand_bg_3.png", logo: "brand_logo_3.png", category: "Type C" },
+  { id: 4, name: "Brand 4", bgImage: "brand_bg_1.png", logo: "brand_logo_1.png", category: "Type A" },
+  { id: 5, name: "Brand 5", bgImage: "brand_bg_2.png", logo: "brand_logo_2.png", category: "Type B" },
+  { id: 6, name: "Brand 6", bgImage: "brand_bg_3.png", logo: "brand_logo_3.png", category: "Type C" },
+  { id: 7, name: "Brand 7", bgImage: "brand_bg_1.png", logo: "brand_logo_1.png", category: "Type A" },
+  { id: 8, name: "Brand 8", bgImage: "brand_bg_2.png", logo: "brand_logo_2.png", category: "Type B" },
+  { id: 9, name: "Brand 9", bgImage: "brand_bg_3.png", logo: "brand_logo_3.png", category: "Type C" },
+  { id: 10, name: "Brand 10", bgImage: "brand_bg_1.png", logo: "brand_logo_1.png", category: "Type A" },
+  { id: 11, name: "Brand 11", bgImage: "brand_bg_2.png", logo: "brand_logo_2.png", category: "Type B" },
+  { id: 12, name: "Brand 12", bgImage: "brand_bg_3.png", logo: "brand_logo_3.png", category: "Type C" },
 ];
 
 export const products = [

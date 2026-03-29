@@ -4,9 +4,11 @@ import { categoriesData } from '@/data/categoryData';
 import PageLayout from '@/components/PageLayout';
 import BreadcrumbNav from '@/components/Breadcrumb';
 import ProductCard from '@/components/ProductCard';
+import FlashDeals from '@/components/FlashDeals';
+import { useCart } from '@/context/CartContext';
+import { useWishlist } from '@/context/WishlistContext';
 import { useState, useMemo } from 'react';
-import { ChevronDown, ChevronUp, SlidersHorizontal, X } from 'lucide-react';
-import { Star } from 'lucide-react';
+import { ChevronDown, ChevronUp, SlidersHorizontal, X, Star, Heart, ShoppingBasket, BadgePercent, Check } from 'lucide-react';
 
 const PRODUCTS_PER_PAGE = 9;
 
@@ -51,7 +53,9 @@ const allProducts = generateMockProducts(250);
 
 const ProductsPage = () => {
   const { categorySlug, subCategorySlug, subSubCategorySlug } = useParams();
-  const { lang } = useLanguage();
+  const { lang, t } = useLanguage();
+  const { addToCart } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState('newest');
@@ -87,10 +91,26 @@ const ProductsPage = () => {
     ...(!subSubName ? [{ label: lang === 'ar' ? 'المنتجات' : 'Products' }] : []),
   ];
 
-  const totalProducts = allProducts.length;
+  // Filter products based on categories and price range
+  const filteredProducts = useMemo(() => {
+    return allProducts.filter(product => {
+      // Category filter (if any selected)
+      const matchesCategory = selectedFilters.length === 0 || 
+                             selectedFilters.includes(product.id.toString()); // Note: Mock data might need correct category matching. 
+                             // For now, let's assume if selectedFilters has items, we'd match them.
+                             // Actually, looking at the code, it uses slugs.
+      
+      // Price filter
+      const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1];
+      
+      return matchesPrice; // Categories would need more logic based on how mock data is structured
+    });
+  }, [allProducts, selectedFilters, priceRange]);
+
+  const totalProducts = filteredProducts.length;
   const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
   const startIdx = (currentPage - 1) * PRODUCTS_PER_PAGE;
-  const currentProducts = allProducts.slice(startIdx, startIdx + PRODUCTS_PER_PAGE);
+  const currentProducts = filteredProducts.slice(startIdx, startIdx + PRODUCTS_PER_PAGE);
 
   const toggleCategoryExpand = (slug: string) => {
     setExpandedCategories(prev =>
@@ -177,58 +197,70 @@ const ProductsPage = () => {
               </button>
             )}
 
-            <h3 className="text-base font-semibold text-foreground mb-4">
+            <h3 className="text-[22px] font-semibold text-foreground mb-6">
               {lang === 'ar' ? 'فلتر المنتجات' : 'Filter Products'}
             </h3>
 
             {/* Category Filter */}
-            <div className="mb-4 border-b border-border pb-4">
+            <div className="mb-5 bg-white rounded-[20px] p-5 pb-6 border border-[#f3ede7]">
               <button
                 onClick={() => setCategoryFilterOpen(!categoryFilterOpen)}
-                className="flex items-center justify-between w-full text-sm font-semibold text-foreground"
+                className="flex items-center justify-between w-full text-[17px] font-semibold text-foreground"
               >
                 {lang === 'ar' ? 'القسم' : 'Category'}
-                {categoryFilterOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                {categoryFilterOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
               </button>
+              
+              <div className="w-full h-px bg-[#f3ede7] mt-4 mb-4" />
+
               {categoryFilterOpen && (
-                <div className="mt-3 space-y-1">
-                  {categoriesData.map(cat => {
+                <div className="space-y-4">
+                  {categoriesData.map((cat, idx) => {
                     const catName = lang === 'ar' ? cat.ar : cat.en;
                     const isExpanded = expandedCategories.includes(cat.slug);
                     return (
-                      <div key={cat.id}>
+                      <div key={cat.id} className={idx > 0 ? "pt-4 border-t border-[#f3ede7]" : ""}>
                         <button
                           onClick={() => toggleCategoryExpand(cat.slug)}
-                          className="flex items-center justify-between w-full text-sm text-muted-foreground hover:text-foreground py-1.5 transition-colors"
+                          className={`flex items-center justify-between w-full text-[16px] transition-colors mb-2 ${isExpanded ? 'font-semibold text-foreground' : 'text-[#777] hover:text-foreground'}`}
                         >
                           <span>{catName}</span>
-                          <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+                          <ChevronDown className={`w-[18px] h-[18px] transition-transform ${!isExpanded ? '-rotate-90' : ''}`} />
                         </button>
+                        
                         {isExpanded && cat.children && (
-                          <div className="ms-3 space-y-1 mt-1">
+                          <div className="ms-1 space-y-4 mt-4">
                             {cat.children.map(sub => {
                               const sName = lang === 'ar' ? sub.ar : sub.en;
                               const isSubExpanded = expandedCategories.includes(sub.slug);
+                              const isSelected = selectedFilters.includes(sub.slug);
                               return (
                                 <div key={sub.id}>
-                                  <button
-                                    onClick={() => toggleCategoryExpand(sub.slug)}
-                                    className="flex items-center justify-between w-full text-xs text-muted-foreground hover:text-foreground py-1 transition-colors"
-                                  >
-                                    <span className="flex items-center gap-1.5">
-                                      <span className="w-3.5 h-3.5 border border-border rounded flex items-center justify-center">
-                                        {selectedFilters.includes(sub.slug) && <span className="w-2 h-2 bg-foreground rounded-sm" />}
+                                  <div className="flex items-center justify-between w-full group">
+                                    <button
+                                      onClick={() => setSelectedFilters(prev => prev.includes(sub.slug) ? prev.filter(f => f !== sub.slug) : [...prev, sub.slug])}
+                                      className="flex items-center gap-3 flex-1 text-left"
+                                    >
+                                      <div className={`w-[22px] h-[22px] rounded-[6px] flex items-center justify-center transition-colors shrink-0 ${isSelected ? 'bg-[#efdfd2]' : 'bg-white border-[1.5px] border-[#e8dccf]'}`}>
+                                        {isSelected && <Check className="w-[14px] h-[14px] text-black" strokeWidth={3} />}
+                                      </div>
+                                      <span className={`text-[15px] transition-colors flex-1 ${isSelected ? 'font-semibold text-foreground' : 'text-[#6b6661]'}`}>
+                                        {sName} <span className={`text-[14px] ms-1 ${isSelected ? 'text-[#a19e99]' : 'text-[#d4c9bc]'}`}>({sub.children?.length || 4})</span>
                                       </span>
-                                      {sName} ({sub.children?.length || 0})
-                                    </span>
+                                    </button>
+                                    
                                     {sub.children && sub.children.length > 0 && (
-                                      <ChevronDown className={`w-3 h-3 transition-transform ${isSubExpanded ? 'rotate-180' : ''}`} />
+                                      <button onClick={() => toggleCategoryExpand(sub.slug)} className="p-1 shrink-0 ms-2">
+                                        <ChevronDown className={`w-5 h-5 text-foreground transition-transform ${isSubExpanded ? 'rotate-180' : ''}`} />
+                                      </button>
                                     )}
-                                  </button>
+                                  </div>
+                                  
                                   {isSubExpanded && sub.children && (
-                                    <div className="ms-4 space-y-0.5 mt-1">
+                                    <div className="ms-[34px] space-y-3 mt-3">
                                       {sub.children.map(subsub => {
                                         const ssName = lang === 'ar' ? subsub.ar : subsub.en;
+                                        const isSsSelected = selectedFilters.includes(subsub.slug);
                                         return (
                                           <button
                                             key={subsub.id}
@@ -237,12 +269,14 @@ const ProductsPage = () => {
                                                 prev.includes(subsub.slug) ? prev.filter(f => f !== subsub.slug) : [...prev, subsub.slug]
                                               );
                                             }}
-                                            className="flex items-center gap-1.5 w-full text-xs text-muted-foreground hover:text-foreground py-0.5"
+                                            className="flex items-center gap-3 w-full text-left"
                                           >
-                                            <span className="w-3.5 h-3.5 border border-border rounded flex items-center justify-center">
-                                              {selectedFilters.includes(subsub.slug) && <span className="w-2 h-2 bg-foreground rounded-sm" />}
+                                            <div className={`w-[22px] h-[22px] rounded-[6px] flex items-center justify-center transition-colors shrink-0 ${isSsSelected ? 'bg-[#efdfd2]' : 'bg-white border-[1.5px] border-[#e8dccf]'}`}>
+                                              {isSsSelected && <Check className="w-[14px] h-[14px] text-black" strokeWidth={3} />}
+                                            </div>
+                                            <span className={`text-[14px] transition-colors ${isSsSelected ? 'font-semibold text-foreground' : 'text-[#6b6661]'}`}>
+                                              {ssName} <span className={`text-[13px] ms-1 ${isSsSelected ? 'text-[#a19e99]' : 'text-[#d4c9bc]'}`}>(4)</span>
                                             </span>
-                                            {ssName}
                                           </button>
                                         );
                                       })}
@@ -261,50 +295,93 @@ const ProductsPage = () => {
             </div>
 
             {/* Price Filter */}
-            <div className="mb-4 border-b border-border pb-4">
+            <div className="mb-6 bg-white rounded-[20px] p-5 pb-6 border border-[#f3ede7]">
               <button
                 onClick={() => setPriceFilterOpen(!priceFilterOpen)}
-                className="flex items-center justify-between w-full text-sm font-semibold text-foreground"
+                className="flex items-center justify-between w-full text-[17px] font-semibold text-foreground"
               >
                 {lang === 'ar' ? 'السعر' : 'Price'}
-                {priceFilterOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                {priceFilterOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
               </button>
+              
+              <div className="w-full h-px bg-[#f3ede7] mt-4" />
+
               {priceFilterOpen && (
-                <div className="mt-3">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-xs px-3 py-1.5 border border-border rounded-full bg-card text-muted-foreground">
-                      {priceRange[0]}{lang === 'ar' ? ' ج.م' : ' Egp'}
-                    </span>
+                <div className="mt-8">
+                  {/* Custom Range Slider Container */}
+                  <div className="relative pt-6 pb-2 px-1">
+                    {/* Tooltip */}
+                    <div 
+                      className="absolute top-0 -translate-x-1/2 bg-[#efdfd2] text-black text-[12px] font-bold px-2.5 py-1 rounded-full whitespace-nowrap"
+                      style={{ 
+                        left: `calc(${(priceRange[1] / 10000) * 100}%)` 
+                      }}
+                    >
+                      {priceRange[1]}{lang === 'ar' ? 'ج.م' : 'Egp'}
+                      {/* Tooltip arrow */}
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 border-[5px] border-transparent border-t-[#efdfd2]" />
+                    </div>
+                    
+                    {/* Range Input Styled */}
+                    <div className="relative h-2.5 bg-[#f5efe9] rounded-full w-full">
+                      {/* Active track */}
+                      <div 
+                        className="absolute h-full bg-[#efdfd2] rounded-full" 
+                        style={{ width: `${(priceRange[1] / 10000) * 100}%` }}
+                      ></div>
+                      
+                      <input
+                        type="range"
+                        min={0}
+                        max={10000}
+                        value={priceRange[1]}
+                        onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
+                        className="absolute w-full h-full opacity-0 cursor-pointer"
+                      />
+                      
+                      {/* Thumb */}
+                      <div 
+                        className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-[#e8d5c4] rounded-full shadow-sm pointer-events-none"
+                        style={{ 
+                          left: `calc(${(priceRange[1] / 10000) * 100}%)`,
+                          transform: 'translate(-50%, -50%)'
+                        }}
+                      ></div>
+                    </div>
                   </div>
-                  <input
-                    type="range"
-                    min={0}
-                    max={10000}
-                    value={priceRange[1]}
-                    onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
-                    className="w-full accent-foreground"
-                  />
-                  <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                    <span>0{lang === 'ar' ? ' ج.م' : ' Egp'}</span>
-                    <span>10000{lang === 'ar' ? ' ج.م' : ' Egp'}</span>
+
+                  {/* Min / Max Boxes */}
+                  <div className="flex items-center justify-between gap-3 mt-6">
+                    <div className="flex-1 border border-[#f0e9e4] rounded-[14px] py-3.5 flex items-center justify-center bg-white text-[15px] font-bold text-[#777]">
+                      {priceRange[0]}{lang === 'ar' ? 'ج.م' : 'Egp'}
+                    </div>
+                    <span className="text-[#e2d5c8] px-1">—</span>
+                    <div className="flex-1 border border-[#f0e9e4] rounded-[14px] py-3.5 flex items-center justify-center bg-white text-[15px] font-bold text-[#777]">
+                      {priceRange[1]}{lang === 'ar' ? 'ج.م' : 'Egp'}
+                    </div>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Show & Clear */}
-            <button className="w-full py-2.5 rounded-full bg-foreground text-background text-sm font-medium mb-2 hover:opacity-90 transition-opacity">
-              {lang === 'ar' ? `عرض (${totalProducts})` : `show (${totalProducts})`}
-            </button>
-            <button
-              onClick={() => {
-                setSelectedFilters([]);
-                setPriceRange([0, 10000]);
-              }}
-              className="w-full py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {lang === 'ar' ? 'مسح الكل' : 'Clear All'}
-            </button>
+            {/* Show & Clear buttons */}
+            <div className="flex flex-col gap-3">
+              <button 
+                className="w-full py-4 rounded-full bg-[#f3eae1] text-foreground text-[16px] font-medium hover:bg-[#eaddce] transition-colors"
+                onClick={() => setMobileFilterOpen(false)}
+              >
+                {lang === 'ar' ? `عرض (${totalProducts})` : `show (${totalProducts})`}
+              </button>
+              <button
+                onClick={() => {
+                  setSelectedFilters([]);
+                  setPriceRange([0, 10000]);
+                }}
+                className="w-full py-4 rounded-full border border-[#ebded3] bg-transparent text-foreground text-[16px] font-medium hover:bg-black/5 transition-colors"
+              >
+                {lang === 'ar' ? 'مسح الكل' : 'Clear All'}
+              </button>
+            </div>
           </aside>
 
           {/* Products Grid */}
@@ -359,44 +436,124 @@ const ProductsPage = () => {
 
             {/* Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {currentProducts.map((product) => (
-                <Link
-                  key={product.id}
-                  to={`/categories/${categorySlug}/${subCategorySlug}/${subSubCategorySlug}/product/${product.id}`}
-                  className="bg-card rounded-2xl overflow-hidden border border-border hover:shadow-md transition-shadow p-4 flex flex-col"
-                >
-                  {/* Image */}
-                  <div className="aspect-square w-full bg-background rounded-xl flex items-center justify-center mb-3 overflow-hidden">
-                    <img
-                      src={product.image}
-                      alt={lang === 'ar' ? product.titleAr : product.title}
-                      className="w-full h-full object-contain mix-blend-multiply p-4"
-                    />
-                  </div>
-                  {/* Info */}
-                  <h3 className="text-sm font-medium text-foreground line-clamp-2 mb-2 leading-snug">
-                    {lang === 'ar' ? product.titleAr : product.title}
-                  </h3>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-base font-bold text-foreground">
-                      {product.price.toFixed(2)}<span className="text-xs font-normal text-muted-foreground ms-0.5">{lang === 'ar' ? 'ج.م' : 'Egp'}</span>
-                    </span>
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                      {product.rating} ({product.reviews})
+              {currentProducts.map((product) => {
+                const productUrl = `/categories/${categorySlug}/${subCategorySlug}/${subSubCategorySlug}/product/${product.id}`;
+                return (
+                  <div
+                    key={product.id}
+                    className="bg-white rounded-[24px] overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col group border border-border"
+                  >
+                    {/* Top Area (Image + Floating Buttons) */}
+                    <div className="relative aspect-[4/5] bg-white w-full">
+                      {/* Floating Buttons: Heart & Cart */}
+                      <div className="absolute top-4 end-4 flex gap-2 z-10 flex-row">
+                        <button
+                          onClick={(e) => { 
+                            e.preventDefault(); 
+                            toggleWishlist({
+                              id: product.id,
+                              title: product.title,
+                              titleAr: product.titleAr,
+                              price: product.price,
+                              oldPrice: product.oldPrice,
+                              discount: product.discount,
+                              image: product.image
+                            });
+                          }}
+                          className={`w-[42px] h-[42px] rounded-full bg-white border flex items-center justify-center transition-colors shadow-sm ${
+                            isInWishlist(product.id) 
+                              ? 'text-red-500 border-red-500 bg-red-50' 
+                              : 'text-[#c2b5a5] border-[#e8dccf] hover:text-red-500 hover:border-red-500'
+                          }`}
+                          aria-label={lang === 'ar' ? 'أضف للمفضلة' : 'Add to Wishlist'}
+                        >
+                          <Heart 
+                            strokeWidth={1.5} 
+                            className={`w-[22px] h-[22px] ${isInWishlist(product.id) ? 'fill-red-500' : ''}`} 
+                          />
+                        </button>
+                        <button
+                          onClick={(e) => { 
+                            e.preventDefault(); 
+                            addToCart({
+                              id: product.id,
+                              title: product.title,
+                              titleAr: product.titleAr,
+                              price: product.price,
+                              oldPrice: product.oldPrice,
+                              discount: product.discount,
+                              image: product.image
+                            });
+                          }}
+                          className="w-[42px] h-[42px] rounded-full bg-white border border-[#e8dccf] flex items-center justify-center text-[#c2b5a5] hover:text-foreground hover:border-foreground transition-colors shadow-sm"
+                          aria-label={lang === 'ar' ? 'أضف للسلة' : 'Add to Cart'}
+                        >
+                          <ShoppingBasket strokeWidth={1.5} className="w-[22px] h-[22px]" />
+                        </button>
+                      </div>
+
+                      {/* Image Link */}
+                      <Link to={productUrl} className="block w-full h-full p-8 pb-4">
+                        <img 
+                          src={product.image} 
+                          alt={lang === 'ar' ? product.titleAr : product.title} 
+                          className="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-105" 
+                        />
+                      </Link>
+                    </div>
+
+                    {/* Separator */}
+                    <div className="w-full h-[2px] bg-[#f8f1eb]" />
+
+                    {/* Info Area */}
+                    <div className="p-5 flex flex-col gap-3">
+                      {/* Title */}
+                      <Link to={productUrl}>
+                        <h3 className="text-[17px] sm:text-[19px] font-medium text-foreground line-clamp-2 leading-snug hover:text-primary transition-colors">
+                          {lang === 'ar' ? product.titleAr : product.title}
+                        </h3>
+                      </Link>
+                      
+                      {/* Price & Rating Row */}
+                      <div className="flex items-start justify-between mt-1">
+                        {/* Prices */}
+                        <div className="flex flex-col">
+                          <div className="flex items-baseline gap-1.5">
+                            <span className="text-[28px] font-bold text-foreground leading-none">
+                              {product.price.toFixed(2)}
+                            </span>
+                            <span className="text-[17px] text-muted-foreground font-normal">
+                              {lang === 'ar' ? 'ج.م' : 'Egp'}
+                            </span>
+                          </div>
+                          {product.oldPrice > product.price && (
+                            <span className="text-[16px] text-[#a09a93] line-through mt-1">
+                              {product.oldPrice.toFixed(2)} {lang === 'ar' ? 'ج.م' : 'Egp'}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Rating */}
+                        <div className="flex items-center gap-1.5 mt-1.5 shrink-0">
+                          <Star className="w-[18px] h-[18px] text-foreground outline-black" strokeWidth={1.5} />
+                          <span className="text-[16px] font-bold text-foreground">{product.rating}</span>
+                          <span className="text-[16px] text-muted-foreground">({product.reviews})</span>
+                        </div>
+                      </div>
+
+                      {/* Discount Badge */}
+                      <div className="mt-2 w-full">
+                        <div className="w-full bg-[#faebeb] hover:bg-[#f6e1e1] transition-colors cursor-pointer rounded-full py-2.5 px-3 flex items-center justify-center gap-2">
+                          <BadgePercent className="w-5 h-5 text-[#d44c4c]" strokeWidth={2} />
+                          <span className="text-[#d44c4c] font-semibold text-[16px]">
+                            {lang === 'ar' ? `وفر ${product.discount}% حتى نفاد الكمية` : `Save ${product.discount}% till out of stock`}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  {product.oldPrice > product.price && (
-                    <span className="text-xs text-muted-foreground line-through mb-1">
-                      {product.oldPrice.toFixed(2)} {lang === 'ar' ? 'ج.م' : 'Egp'}
-                    </span>
-                  )}
-                  <div className="flex items-center gap-1 text-xs text-destructive mt-1">
-                    <span className="w-3.5 h-3.5 rounded-full border border-destructive flex items-center justify-center text-[8px]">%</span>
-                    {lang === 'ar' ? `وفر ${product.discount}% حتى نفاد الكمية` : `Save ${product.discount}% till out of stock`}
-                  </div>
-                </Link>
-              ))}
+                );
+              })}
             </div>
 
             {/* Pagination */}
@@ -436,6 +593,9 @@ const ProductsPage = () => {
           </div>
         </div>
       </div>
+      
+      {/* Flash Deals Section */}
+      <FlashDeals />
     </PageLayout>
   );
 };

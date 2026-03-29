@@ -3,16 +3,18 @@ import { useLanguage } from '@/i18n/LanguageContext';
 import { Link } from 'react-router-dom';
 import { Search, Heart, ShoppingBag, User, UserPlus, Menu, X, ChevronDown } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
+import { useWishlist } from '@/context/WishlistContext';
 import logo from '@/assets/logo.svg';
 
 const Header = () => {
   const { t, lang, setLang } = useLanguage();
   const { totalItems, setIsCartOpen } = useCart();
+  const { totalWishlistItems } = useWishlist();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const navLinks = [
-    { key: 'home' as const, href: '#', hasDropdown: false },
-    { key: 'brands' as const, href: '#brands', hasDropdown: true },
+    { key: 'home' as const, href: '/', hasDropdown: false },
+    { key: 'brands' as const, href: '/brands', hasDropdown: true },
     { key: 'downloadProducts' as const, href: '#', hasDropdown: true },
     { key: 'categories' as const, href: '/categories', hasDropdown: true },
   ];
@@ -52,9 +54,17 @@ const Header = () => {
         {/* Actions */}
         <div className="hidden md:flex items-center gap-4 shrink-0">
           <div className="flex items-center gap-2">
-            <button className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-black/5 transition-colors text-foreground">
+            <Link 
+              to="/favorites"
+              className="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-black/5 transition-colors text-foreground"
+            >
               <Heart className="w-5 h-5" />
-            </button>
+              {totalWishlistItems > 0 && (
+                <span className="absolute -top-1 -end-1 min-w-[20px] h-5 px-1 flex items-center justify-center rounded-full bg-red-500 text-white text-[11px] font-bold">
+                  {totalWishlistItems}
+                </span>
+              )}
+            </Link>
 
             <button
               onClick={() => setIsCartOpen(true)}
@@ -128,9 +138,18 @@ const Header = () => {
             </div>
             
             <div className="flex justify-around py-2 border-y border-gray-100">
-              <button className="flex items-center justify-center p-2 rounded-full hover:bg-gray-50 text-foreground">
+              <Link 
+                to="/favorites"
+                onClick={() => setMobileOpen(false)}
+                className="relative flex items-center justify-center p-2 rounded-full hover:bg-gray-50 text-foreground"
+              >
                 <Heart className="w-5 h-5" />
-              </button>
+                {totalWishlistItems > 0 && (
+                  <span className="absolute -top-0.5 -end-0.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-red-500 text-white text-[10px] font-bold">
+                    {totalWishlistItems}
+                  </span>
+                )}
+              </Link>
               <button
                 onClick={() => { setIsCartOpen(true); setMobileOpen(false); }}
                 className="relative flex items-center justify-center p-2 rounded-full hover:bg-gray-50 text-foreground"

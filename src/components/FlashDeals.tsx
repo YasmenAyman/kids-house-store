@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { flashDeals } from '@/data/mockData';
-import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Sparkles, Heart, ShoppingBasket, ShieldCheck } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
 import {
   Carousel,
   CarouselContent,
@@ -11,6 +12,7 @@ import {
 
 const FlashDeals = () => {
   const { t, lang } = useLanguage();
+  const { addToCart } = useCart();
   const [api, setApi] = useState<CarouselApi>();
 
   // Countdown - 10 days from now (to match design 10D : 02H : 20M)
@@ -139,7 +141,18 @@ const FlashDeals = () => {
                             </div>
                           </div>
 
-                          <button className="w-full mt-5 py-3 rounded-full bg-[#F4EBE3] text-sm font-semibold text-foreground hover:bg-[#e6dcd4] transition-colors flex items-center justify-center">
+                          <button 
+                            onClick={() => addToCart({
+                              id: deal.id,
+                              title: deal.title,
+                              titleAr: deal.titleAr,
+                              price: deal.price,
+                              oldPrice: deal.oldPrice,
+                              discount: deal.discount,
+                              image: deal.image
+                            })}
+                            className="w-full mt-5 py-3 rounded-full bg-[#F4EBE3] text-sm font-semibold text-foreground hover:bg-[#e6dcd4] transition-colors flex items-center justify-center"
+                          >
                             {t('purchaseNow')}
                           </button>
                         </div>
