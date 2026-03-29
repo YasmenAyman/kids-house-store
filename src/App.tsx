@@ -15,6 +15,7 @@ import ProductsPage from "./pages/ProductsPage.tsx";
 import ProductDetailPage from "./pages/ProductDetailPage.tsx";
 import BrandsPage from "./pages/BrandsPage.tsx";
 import FavoritesPage from "./pages/FavoritesPage.tsx";
+import CheckoutPage from "./pages/CheckoutPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/brands" element={<BrandsPage />} />
                 <Route path="/favorites" element={<FavoritesPage />} />
+                <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/categories" element={<CategoriesPage />} />
                 <Route path="/categories/:categorySlug" element={<SubCategoriesPage />} />
                 <Route path="/categories/:categorySlug/:subCategorySlug" element={<SubSubCategoriesPage />} />
