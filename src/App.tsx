@@ -15,6 +15,7 @@ import ProductsPage from "./pages/ProductsPage.tsx";
 import ProductDetailPage from "./pages/ProductDetailPage.tsx";
 import BrandsPage from "./pages/BrandsPage.tsx";
 import FavoritesPage from "./pages/FavoritesPage.tsx";
+import CheckoutPage from "./pages/CheckoutPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
